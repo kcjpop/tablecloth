@@ -34,14 +34,14 @@ module Array = struct
 
   let to_list = toList
 
-  let toIndexedList array = 
-    Belt.Array.reduceReverse array (length array - 1, []) (fun (i, acc) x -> 
+  let toIndexedList array =
+    Belt.Array.reduceReverse array (length array - 1, []) (fun (i, acc) x ->
       (i - 1, ((i, x) :: acc)))
     |> snd
 
   let to_indexed_list = toIndexedList
 
-  let get ~index array = Belt.Array.get array index 
+  let get ~index array = Belt.Array.get array index
 
   let set ~index ~value array = array.(index) <- value
 
@@ -71,13 +71,13 @@ module Array = struct
 
   let flat_map = flatMap
 
-  let find ~(f : 'a -> bool) (array : 'a array) : 'a option = 
+  let find ~(f : 'a -> bool) (array : 'a array) : 'a option =
     let rec find_loop array ~f ~length i =
       if i >= length then None
       else if f array.(i) then Some (array.(i))
       else find_loop array ~f ~length (i + 1)
     in
-    find_loop array ~f ~length:(length array) 0 
+    find_loop array ~f ~length:(length array) 0
 
   let any ~(f : 'a -> bool) (a : 'a array) : bool = Belt.Array.some a f
 
@@ -87,27 +87,27 @@ module Array = struct
 
   let concatenate (ars : 'a array array) : 'a array = Belt.Array.concatMany ars
 
-  let intersperse ~(sep : 'a) (array : 'a array) : 'a array = 
+  let intersperse ~(sep : 'a) (array : 'a array) : 'a array =
     Belt.Array.makeBy
-      (max 0 (length array * 2 - 1)) 
-      (fun i -> 
+      (max 0 (length array * 2 - 1))
+      (fun i ->
         if i mod 2 <> 0 then sep else array.(i / 2)
       )
 
   let slice ~from ?to_ array =
-    let defaultTo = match to_ with 
+    let defaultTo = match to_ with
       | None -> length array
       | Some i -> i
     in
-    let sliceFrom = 
-      if from >= 0 then min (length array) from 
+    let sliceFrom =
+      if from >= 0 then min (length array) from
       else max 0 (min (length array) (length array + from))
-    in    
-    let sliceTo = 
-      if defaultTo >= 0 then min (length array) defaultTo 
+    in
+    let sliceTo =
+      if defaultTo >= 0 then min (length array) defaultTo
       else max 0 (min (length array) (length array + defaultTo))
-    in    
-    
+    in
+
     if sliceFrom >= sliceTo then empty else (
       Belt.Array.makeBy (sliceTo - sliceFrom) (fun i -> array.(i + sliceFrom))
     )
@@ -407,7 +407,7 @@ module List = struct
   let splitWhen ~(f : 'a -> bool) (l : 'a list) : ('a list * 'a list) =
     match findIndex ~f l with
       | Some index -> splitAt ~index l
-      | None -> (l, []) 
+      | None -> (l, [])
 
   let split_when = splitWhen
 
@@ -521,7 +521,7 @@ module Option = struct
 
   let with_default = withDefault
 
-  
+
   let values (l : 'a option list) : 'a list =
     let valuesHelper (item : 'a option) (l: 'a list) : 'a list =
       match item with None -> l | Some v -> v :: l in
@@ -545,12 +545,12 @@ module Option = struct
   let to_option = toOption
 end
 
-module Char = struct  
+module Char = struct
   let toCode (c : char) : int = Char.code c
 
   let to_code = toCode
 
-  let fromCode (i : int) : char option = 
+  let fromCode (i : int) : char option =
     if 0 <= i && i <= 255 then Some (Char.chr i) else None
 
   let from_code = fromCode
@@ -571,17 +571,17 @@ module Char = struct
 
   let to_digit = toDigit
 
-  let toLowercase char =     
+  let toLowercase char =
     match char with
-    | 'A'..'Z' -> 
-      Char.chr (toCode 'a' + (toCode char - toCode 'A'))      
+    | 'A'..'Z' ->
+      Char.chr (toCode 'a' + (toCode char - toCode 'A'))
     | _ -> char
 
   let to_lowercase = toLowercase
 
-  let toUppercase char = 
+  let toUppercase char =
     match char with
-    | 'a'..'z' -> 
+    | 'a'..'z' ->
       Char.chr (toCode 'A' + (toCode char - toCode 'a'))
     | _ -> char
 
@@ -610,7 +610,7 @@ module Char = struct
     | _ -> false
 
   let is_digit = isDigit
-  
+
   let isAlphanumeric = function
     | 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' -> true
     | _ -> false
@@ -622,7 +622,7 @@ module Char = struct
     | _ -> false
 
   let is_printable = isPrintable
-  
+
   let isWhitespace = function
     | '\t'
     | '\n'
@@ -654,7 +654,7 @@ module Tuple2 = struct
   let create a b = (a, b)
 
   let first ((a, _) : 'a * 'b) : 'a = a
-  
+
   let second ((_, b) : 'a * 'b) : 'b = b
 
   let mapFirst ~(f : 'a -> 'x) ((a, b) : 'a * 'b) : 'x * 'b = (f a, b)
@@ -668,7 +668,7 @@ module Tuple2 = struct
   let mapEach ~(f : 'a -> 'x) ~(g : 'b -> 'y) ((a, b) : 'a * 'b) : 'x * 'y = (f a, g b)
 
   let map_each = mapEach
-  
+
   let mapAll ~(f : 'a -> 'b) (a1, a2) = (f a1, f a2)
 
   let map_all = mapAll
@@ -690,7 +690,7 @@ module Tuple3 = struct
   let first ((a, _, _) : 'a * 'b * 'c) : 'a = a
 
   let second ((_, b, _) : 'a * 'b * 'c) : 'b = b
-  
+
   let third ((_, _, c) : 'a * 'b * 'c) : 'c = c
 
   let init ((a, b, _) : 'a * 'b * 'c): ('a * 'b) = (a, b)
@@ -727,7 +727,7 @@ module Tuple3 = struct
 
   let curry (f : (('a * 'b * 'c) -> 'd)) (a : 'a) (b : 'b)  (c : 'c) : 'd = f (a, b, c)
 
-  let uncurry (f : 'a -> 'b -> 'c -> 'd) ((a, b, c) : ('a * 'b * 'c)) : 'd =  f a b c 
+  let uncurry (f : 'a -> 'b -> 'c -> 'd) ((a, b, c) : ('a * 'b * 'c)) : 'd =  f a b c
 
   let toList ((a, b, c) : ('a * 'a * 'a)) : 'a list = [a; b; c]
 
@@ -785,19 +785,19 @@ module String = struct
 
   let starts_with = startsWith
 
-  let toLower (s : string) : string = String.lowercase s
+  let toLower (s : string) : string = String.lowercase_ascii s
 
   let to_lower = toLower
 
-  let toUpper (s : string) : string = String.uppercase s
+  let toUpper (s : string) : string = String.uppercase_ascii s
 
   let to_upper = toUpper
 
-  let uncapitalize (s : string) : string = String.uncapitalize s
+  let uncapitalize (s : string) : string = String.uncapitalize_ascii s
 
-  let capitalize (s : string) : string = String.capitalize s
+  let capitalize (s : string) : string = String.capitalize_ascii s
 
-  let isCapitalized (s : string) : bool = s = String.capitalize s
+  let isCapitalized (s : string) : bool = s = String.capitalize_ascii s
 
   let is_capitalized = isCapitalized
 
@@ -806,11 +806,11 @@ module String = struct
 
   let repeat ~(count : int) (s : string) : string = Js.String.repeat count s
 
-  let reverse (s : string) =  
-    s 
-    |> Js.String.castToArrayLike 
-    |> Js.Array.from 
-    |> Js.Array.reverseInPlace 
+  let reverse (s : string) =
+    s
+    |> Js.String.castToArrayLike
+    |> Js.Array.from
+    |> Js.Array.reverseInPlace
     |> Belt.List.fromArray
     |> String.concat ""
 
@@ -1091,19 +1091,19 @@ module IntDict = struct
     Map.merge dict1 dict2 f
 end
 
-module Regex = struct 
+module Regex = struct
   type t = Js.Re.t
 
   type result = Js.Re.result
 
   let regex s : Js.Re.t = Js.Re.fromStringWithFlags ~flags:"g" s
 
-  let contains ~(re : Js.Re.t) (s : string) : bool = Js.Re.test s re
+  let contains ~(re : Js.Re.t) (s : string) : bool = Js.Re.test_ re s
 
   let replace ~(re : Js.Re.t) ~(repl : string) (str : string) =
     Js.String.replaceByRe re repl str
 
 
   let matches ~(re : Js.Re.t) (s : string) : Js.Re.result option =
-    Js.Re.exec s re
+    Js.Re.exec_ re s
 end

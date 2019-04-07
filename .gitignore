@@ -1,4 +1,5 @@
 .merlin
+node_modules
 /native/tablecloth-native.install
 /native/_build
 /bs/node_modules

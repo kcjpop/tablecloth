@@ -1,0 +1,13 @@
+# ninja log v5
+0	29	1554659366	__tests__/tablecloth_test.mlast	e7ef0ad17fe7f571
+1	30	1554659366	src/tablecloth.mliast	ebd45093041742
+2	32	1554659366	src/tablecloth.mlast	a5274c5bef6a7970
+29	39	1554659366	__tests__/tablecloth_test.mlast.d	3f1f4d82d2278297
+30	40	1554659366	src/tablecloth.mliast.d	b5b9d30167e55956
+32	41	1554659366	src/tablecloth.mlast.d	9e867519bcdfe84a
+2	38	1554659366	src/tablecloth.cmi	9acdb39f43f89412
+38	129	1554659366	src/tablecloth.cmj	89113159d4ea5f48
+38	129	1554659366	/Users/an/nw/tablecloth/src/tablecloth.bs.js	89113159d4ea5f48
+129	191	1554659366	__tests__/tablecloth_test.cmj	601b23ddf9cb353b
+129	191	1554659366	/Users/an/nw/tablecloth/__tests__/tablecloth_test.bs.js	601b23ddf9cb353b
+129	191	1554659366	__tests__/tablecloth_test.cmi	601b23ddf9cb353b
